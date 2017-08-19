@@ -1,17 +1,17 @@
 {
-  "name": "react-photo-gallery",
+  "name": "react-multimedia-gallery",
   "version": "5.6.1",
-  "description": "Responsive React Photo Gallery Component",
+  "description": "Responsive React Multimedia Gallery Component where you can deal with videos, photos and texts in the same way",
   "main": "lib/Gallery.js",
-  "author": "Sandy Gonzales",
+  "author": "Sandy Gonzales, Antonio Campos",
   "license": "MIT",
-  "homepage": "https://github.com/neptunian/react-photo-gallery",
+  "homepage": "https://github.com/acamposruiz/react-multimedia-gallery",
   "repository": {
     "type": "git",
-    "url": "https://github.com/neptunian/react-photo-gallery.git"
+    "url": "https://github.com/acamposruiz/react-multimedia-gallery.git"
   },
   "bugs": {
-    "url": "https://github.com/neptunian/react-photo-gallery/issues"
+    "url": "https://github.com/acamposruiz/react-multimedia-gallery/issues"
   },
   "dependencies": {
     "prop-types": "~15.5.4"
@@ -53,7 +53,7 @@
     "react",
     "react component",
     "react-component",
-    "photo gallery",
+    "multimedia gallery",
     "responsive",
     "image gallery",
     "images"
