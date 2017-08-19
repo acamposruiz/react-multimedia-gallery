@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/react-multimedia-gallery/Lobby](https://badges.gitter.im/react-multimedia-gallery/Lobby.svg)](https://gitter.im/react-multimedia-gallery/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A stateless responsive React photo gallery component that maintains the original aspect ratio of your photos and scales them responsively.
+A stateless responsive React multimedia gallery component that maintains the original aspect ratio of your photos and scales them responsively.
 Add your own routing, lightbox, and manage your own state. 
 
 ## Installation
