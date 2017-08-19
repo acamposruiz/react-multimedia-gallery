@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Gallery from 'react-photo-gallery';
+import Gallery from 'react-multimedia-gallery';
 import $ from 'jquery';
 import _ from 'lodash';
 import Measure from 'react-measure';

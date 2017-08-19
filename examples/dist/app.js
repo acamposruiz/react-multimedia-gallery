@@ -19,7 +19,7 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _reactPhotoGallery = require('react-photo-gallery');
+var _reactPhotoGallery = require('react-multimedia-gallery');
 
 var _reactPhotoGallery2 = _interopRequireDefault(_reactPhotoGallery);
 
@@ -213,7 +213,7 @@ var App = (function (_React$Component) {
 
 _reactDom2['default'].render(_react2['default'].createElement(App, null), document.getElementById('app'));
 
-},{"jquery":8,"lodash":9,"react":undefined,"react-dom":undefined,"react-images":undefined,"react-measure":17,"react-photo-gallery":undefined}],2:[function(require,module,exports){
+},{"jquery":8,"lodash":9,"react":undefined,"react-dom":undefined,"react-images":undefined,"react-measure":17,"react-multimedia-gallery":undefined}],2:[function(require,module,exports){
 "use strict";
 
 /**

@@ -1043,7 +1043,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],"react-photo-gallery":[function(require,module,exports){
+},{}],"react-multimedia-gallery":[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

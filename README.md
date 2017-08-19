@@ -1,6 +1,6 @@
 # React Responsive Photo Gallery
 
-[![Join the chat at https://gitter.im/react-photo-gallery/Lobby](https://badges.gitter.im/react-photo-gallery/Lobby.svg)](https://gitter.im/react-photo-gallery/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/react-multimedia-gallery/Lobby](https://badges.gitter.im/react-multimedia-gallery/Lobby.svg)](https://gitter.im/react-multimedia-gallery/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A stateless responsive React photo gallery component that maintains the original aspect ratio of your photos and scales them responsively.
 Add your own routing, lightbox, and manage your own state. 
@@ -10,12 +10,12 @@ Add your own routing, lightbox, and manage your own state.
 To install:
 
 ```
-npm install --save react-photo-gallery
+npm install --save react-multimedia-gallery
 ```
 
 ## Demo
 
-[http://neptunian.github.io/react-photo-gallery/](http://neptunian.github.io/react-photo-gallery/)
+[http://acamposruiz.github.io/react-multimedia-gallery/](http://acamposruiz.github.io/react-multimedia-gallery/)
 
 To build the examples locally, run:
 
@@ -30,7 +30,7 @@ Then open [`localhost:8000`](http://localhost:8000) in a browser.
 
 ```jsx
 import React from 'react';
-import Gallery from 'react-photo-gallery';
+import Gallery from 'react-multimedia-gallery';
 
 export default class Sample extends React.Component {
     render() {
@@ -103,7 +103,7 @@ alt  | string  | undefined | optional; alt text of the gallery image
 
 ### Dynamic column count
 
-The number of columns and when they change is something the user has control over in their app. The parameter `cols` allows the adjustment of the displayed colums. In combination with `react-measure` this allows the demo page to adjust colums (https://github.com/neptunian/react-photo-gallery/blob/master/examples/src/app.js#L103). Code snippet:
+The number of columns and when they change is something the user has control over in their app. The parameter `cols` allows the adjustment of the displayed colums. In combination with `react-measure` this allows the demo page to adjust colums (https://github.com/acamposruiz/react-multimedia-gallery/blob/master/examples/src/app.js#L103). Code snippet:
 
 ```
 import { Measure } from 'react-measure';
