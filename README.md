@@ -1,4 +1,4 @@
-# React Responsive Photo Gallery
+# React Responsive Multimedia Gallery
 
 [![Join the chat at https://gitter.im/react-multimedia-gallery/Lobby](https://badges.gitter.im/react-multimedia-gallery/Lobby.svg)](https://gitter.im/react-multimedia-gallery/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
