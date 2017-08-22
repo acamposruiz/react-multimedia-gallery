@@ -1045,8 +1045,10 @@ module.exports = ReactPropTypesSecret;
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-		value: true
+    value: true
 });
+
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -1067,192 +1069,269 @@ var _propTypes = require('prop-types');
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var Gallery = (function (_React$Component) {
-		_inherits(Gallery, _React$Component);
+    _inherits(Gallery, _React$Component);
 
-		function Gallery() {
-				_classCallCheck(this, Gallery);
+    function Gallery() {
+        _classCallCheck(this, Gallery);
 
-				_get(Object.getPrototypeOf(Gallery.prototype), 'constructor', this).call(this);
-				this.state = {
-						containerWidth: 0
-				};
-				this.handleResize = this.handleResize.bind(this);
-		}
+        _get(Object.getPrototypeOf(Gallery.prototype), 'constructor', this).call(this);
+        this.state = {
+            containerWidth: 0
+        };
+        this.handleResize = this.handleResize.bind(this);
+    }
 
-		_createClass(Gallery, [{
-				key: 'componentDidMount',
-				value: function componentDidMount() {
-						this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-						window.addEventListener('resize', this.handleResize);
-				}
-		}, {
-				key: 'componentDidUpdate',
-				value: function componentDidUpdate() {
-						if (this._gallery.clientWidth !== this.state.containerWidth) {
-								this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-						}
-				}
-		}, {
-				key: 'componentWillUnmount',
-				value: function componentWillUnmount() {
-						window.removeEventListener('resize', this.handleResize, false);
-				}
-		}, {
-				key: 'handleResize',
-				value: function handleResize(e) {
-						this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-				}
-		}, {
-				key: 'render',
-				value: function render() {
-						var _props = this.props;
-						var cols = _props.cols;
-						var margin = _props.margin;
-						var photos = _props.photos;
-						var articles = _props.articles;
-						var onClickPhoto = _props.onClickPhoto;
+    _createClass(Gallery, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+            window.addEventListener('resize', this.handleResize);
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            if (this._gallery.clientWidth !== this.state.containerWidth) {
+                this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+            }
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            window.removeEventListener('resize', this.handleResize, false);
+        }
+    }, {
+        key: 'handleResize',
+        value: function handleResize(e) {
+            this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+        }
+    }, {
+        key: 'processItems',
+        value: function processItems(photos, articles) {
 
-						console.log(articles);
+            function indexAll(elemts) {
+                elemts.map(function (e, index) {
+                    return e['oldIndex'] = index;
+                });
+            }
 
-						var containerWidth = this.state.containerWidth;
+            function merge(array1, array2) {
 
-						var remainder = photos.length % cols;
+                var output = [];
 
-						// calculate the available space for the images by subtracting the margin space from the actual parent container width
-						// the 2 is for each side of the image
-						var containerSpace = Math.floor(containerWidth - cols * (margin * 2));
-						var imgNodes = [];
-						var lastRowWidth = undefined;
-						var lastRowIndex = undefined;
+                var _ref = array1.length > array2.length ? [array1, array2] : [array2, array1];
 
-						if (remainder) {
-								// there are fewer photos than cols num in last row
-								lastRowWidth = Math.floor(containerWidth / cols * remainder - remainder * (margin * 2));
-								lastRowIndex = photos.length - remainder;
-						}
+                var _ref2 = _slicedToArray(_ref, 2);
 
-						// loop thru each set of cols num
-						// eg. if cols is 3 it will loop thru 0,1,2, then 3,4,5 to perform calculations for the particular set
-						for (var i = 0; i < photos.length; i += cols) {
-								var totalAspectRatio = 0;
-								var commonHeight = 0;
+                var arrayBase = _ref2[0];
+                var arrayIntro = _ref2[1];
 
-								// get the total aspect ratio of the row
-								for (var j = i; j < i + cols; j++) {
+                var size = Math.floor(arrayBase.length / arrayIntro.length);
 
-										if (!photos[j]) {
-												break;
-										}
+                for (var i = 0, j = 0; i < arrayBase.length; i += size, j++) {
 
-										var _photos$j = photos[j];
-										var width = _photos$j.width;
-										var height = _photos$j.height;
+                    if (j >= arrayIntro.length) {
+                        output = output.concat(arrayBase.slice(i));
+                        break;
+                    } else {
+                        output.push(arrayIntro[j]);
+                        output = output.concat(arrayBase.slice(i, i + size));
+                    }
+                }
 
-										if (j == photos.length) {
-												break;
-										}
-										photos[j].aspectRatio = width / height;
-										totalAspectRatio += photos[j].aspectRatio;
-								}
-								if (i === lastRowIndex) {
-										commonHeight = lastRowWidth / totalAspectRatio;
-								} else {
-										commonHeight = containerSpace / totalAspectRatio;
-								}
-								// run thru the same set of items again to give the width and common height
+                return output;
+            }
 
-								var _loop = function (k) {
-										if (k == photos.length) {
-												return 'break';
-										}
+            if (photos && articles) {
+                indexAll(photos);
+                indexAll(articles);
+                return merge(photos, articles);
+            } else if (photos) {
+                return photos;
+            } else {
+                return articles;
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _props = this.props;
+            var cols = _props.cols;
+            var margin = _props.margin;
+            var photos = _props.photos;
+            var articles = _props.articles;
+            var onClickArticle = _props.onClickArticle;
+            var onClickPhoto = _props.onClickPhoto;
 
-										// explicity set the exact width of the image instead of letting the browser calculate it based on the height of the image
-										// because the browser may round up or down and cause the image to break to the next row if its even 1 pixel off
-										var width = commonHeight * photos[k].aspectRatio;
+            var items = this.processItems(photos, articles);
 
-										var src = photos[k].src;
-										var alt = photos[k].alt;
-										var srcset = undefined;
-										var sizes = undefined;
+            var containerWidth = this.state.containerWidth;
 
-										if (photos[k].srcset) {
-												srcset = photos[k].srcset.join();
-										}
-										if (photos[k].sizes) {
-												sizes = photos[k].sizes.join();
-										}
+            var remainder = items.length % cols;
 
-										style.margin = margin;
+            // calculate the available space for the images by subtracting the margin space from the actual parent container width
+            // the 2 is for each side of the image
+            var containerSpace = Math.floor(containerWidth - cols * (margin * 2));
+            var itemNode = [];
+            var lastRowWidth = undefined;
+            var lastRowIndex = undefined;
 
-										imgNodes.push(_react2['default'].createElement(
-												'div',
-												{ key: k, style: style },
-												_react2['default'].createElement(
-														'a',
-														{ href: '#', className: k, onClick: function (e) {
-																		return onClickPhoto(k, e);
-																} },
-														_react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: width, alt: alt })
-												)
-										));
-								};
+            if (remainder) {
+                // there are fewer photos than cols num in last row
+                lastRowWidth = Math.floor(containerWidth / cols * remainder - remainder * (margin * 2));
+                lastRowIndex = items.length - remainder;
+            }
 
-								for (var k = i; k < i + cols; k++) {
-										var _ret = _loop(k);
+            // loop thru each set of cols num
+            // eg. if cols is 3 it will loop thru 0,1,2, then 3,4,5 to perform calculations for the particular set
+            for (var i = 0; i < items.length; i += cols) {
+                var totalAspectRatio = 0;
+                var commonHeight = 0;
 
-										if (_ret === 'break') break;
-								}
-						}
-						return this.renderGallery(imgNodes);
-				}
-		}, {
-				key: 'renderGallery',
-				value: function renderGallery(photoPreviewNodes) {
-						var _this = this;
+                // get the total aspect ratio of the row
+                for (var j = i; j < i + cols; j++) {
 
-						return _react2['default'].createElement(
-								'div',
-								{ id: 'Gallery', className: 'clearfix', ref: function (c) {
-												return _this._gallery = c;
-										} },
-								photoPreviewNodes
-						);
-				}
-		}]);
+                    if (!items[j]) {
+                        break;
+                    }
 
-		return Gallery;
+                    var _ref3 = items.type == 'photo' ? items[j] : { width: 100, height: 100 };
+
+                    var width = _ref3.width;
+                    var height = _ref3.height;
+
+                    if (j == items.length) {
+                        break;
+                    }
+                    items[j].aspectRatio = width / height;
+                    totalAspectRatio += items[j].aspectRatio;
+                }
+                if (i === lastRowIndex) {
+                    commonHeight = lastRowWidth / totalAspectRatio;
+                } else {
+                    commonHeight = containerSpace / totalAspectRatio;
+                }
+                // run thru the same set of items again to give the width and common height
+                for (var k = i; k < i + cols; k++) {
+                    if (k == items.length) {
+                        break;
+                    }
+
+                    items[k] = items[k] || {};
+
+                    // explicity set the exact width of the image instead of letting the browser calculate it based on the height of the image
+                    // because the browser may round up or down and cause the image to break to the next row if its even 1 pixel off
+                    var width = commonHeight * items[k].aspectRatio;
+
+                    style.margin = margin;
+
+                    itemNode.push(this.renderItem(items[k], k, style, onClickPhoto, onClickArticle, commonHeight, width));
+                }
+            }
+            return this.renderGallery(itemNode);
+        }
+    }, {
+        key: 'renderItem',
+        value: function renderItem(item, k, style, onClickPhoto, onClickArticle, commonHeight, width) {
+            var oldIndex = item.oldIndex;
+
+            if (item.type == 'photo') {
+
+                var src = item.src;
+                var alt = item.alt;
+
+                var srcset = undefined;
+                var sizes = undefined;
+
+                if (item.srcset) {
+                    srcset = item.srcset.join();
+                }
+                if (item.sizes) {
+                    sizes = item.sizes.join();
+                }
+
+                return _react2['default'].createElement(
+                    'div',
+                    { 'data-type': 'photo', key: k, style: style },
+                    _react2['default'].createElement(
+                        'a',
+                        { href: '#', className: k, onClick: function (e) {
+                                return onClickPhoto(oldIndex, e);
+                            } },
+                        _react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: width, alt: alt })
+                    )
+                );
+            } else if (item.type == 'article') {
+                var content = item.content;
+                return _react2['default'].createElement(
+                    'div',
+                    { 'data-type': 'article', key: k, style: style },
+                    _react2['default'].createElement(
+                        'a',
+                        { href: '#', className: k, onClick: function (e) {
+                                return onClickArticle(oldIndex, e);
+                            } },
+                        _react2['default'].createElement(
+                            'div',
+                            { className: 'content', style: { display: 'block', border: 0, height: commonHeight, width: width } },
+                            _react2['default'].createElement(
+                                'span',
+                                null,
+                                content.substring(0, 250),
+                                '...'
+                            )
+                        )
+                    )
+                );
+            }
+        }
+    }, {
+        key: 'renderGallery',
+        value: function renderGallery(itemNodePreviewNodes) {
+            var _this = this;
+
+            return _react2['default'].createElement(
+                'div',
+                { id: 'Gallery', className: 'clearfix', ref: function (c) {
+                        return _this._gallery = c;
+                    } },
+                itemNodePreviewNodes
+            );
+        }
+    }]);
+
+    return Gallery;
 })(_react2['default'].Component);
 
 ;
 Gallery.displayName = 'Gallery';
 Gallery.propTypes = {
-		photos: function photos(props, propName, componentName) {
-				return _propTypes2['default'].arrayOf(_propTypes2['default'].shape({
-						src: _propTypes2['default'].string.isRequired,
-						width: _propTypes2['default'].number.isRequired,
-						height: _propTypes2['default'].number.isRequired,
-						alt: _propTypes2['default'].string,
-						srcset: _propTypes2['default'].array,
-						sizes: _propTypes2['default'].array
-				})).isRequired.apply(this, arguments);
-		},
-		articles: _propTypes2['default'].array,
-		onClickPhoto: _propTypes2['default'].func,
-		cols: _propTypes2['default'].number,
-		margin: _propTypes2['default'].number
+    photos: function photos(props, propName, componentName) {
+        return _propTypes2['default'].arrayOf(_propTypes2['default'].shape({
+            src: _propTypes2['default'].string.isRequired,
+            width: _propTypes2['default'].number.isRequired,
+            height: _propTypes2['default'].number.isRequired,
+            alt: _propTypes2['default'].string,
+            srcset: _propTypes2['default'].array,
+            sizes: _propTypes2['default'].array
+        })).isRequired.apply(this, arguments);
+    },
+    articles: _propTypes2['default'].array,
+    onClickPhoto: _propTypes2['default'].func,
+    cols: _propTypes2['default'].number,
+    margin: _propTypes2['default'].number
 };
 Gallery.defaultProps = {
-		cols: 3,
-		onClickPhoto: function onClickPhoto(k, e) {
-				e.preventDefault();
-		},
-		margin: 2
+    cols: 3,
+    onClickPhoto: function onClickPhoto(k, e) {
+        e.preventDefault();
+    },
+    margin: 2
 };
 // Gallery image style
 var style = {
-		display: 'block',
-		backgroundColor: '#e3e3e3',
-		float: 'left'
+    display: 'block',
+    backgroundColor: '#e3e3e3',
+    float: 'left'
 };
 
 exports['default'] = Gallery;

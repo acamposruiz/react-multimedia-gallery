@@ -66,6 +66,7 @@ class App extends React.Component{
                     height: parseInt(item.height_o),
                     caption: item.title,
                     alt: item.title,
+                    type: 'photo',
                     srcset:[
 						item.url_m+' '+item.width_m+'w',
                         item.url_c+' '+item.width_c+'w',
@@ -79,7 +80,9 @@ class App extends React.Component{
 		    		]
 				};
 	    	});
-	    	const articles = Array(1,1,1).map(item => loremIpsum({count: 3, units: 'sentences'}));
+	    	const articles = Array(1,1,1).map(item => {
+	    	    return {type:'article', content:loremIpsum({count: 3, units: 'sentences'})};
+            });
 	    	this.setState({
 				photos: this.state.photos ? this.state.photos.concat(photos) : photos,
 				articles: this.state.articles ? this.state.articles.concat(articles) : articles,
@@ -97,6 +100,13 @@ class App extends React.Component{
         this.setState({
             currentImage: index,
             lightboxIsOpen: true
+        });
+    }
+    openArticle(index, event){
+        event.preventDefault();
+        this.setState({
+            currentArticle: index,
+            articleboxIsOpen: true
         });
     }
     closeLightbox(){
@@ -130,7 +140,7 @@ class App extends React.Component{
 		    		if (width >= 1024){
 						cols = 3;
 		    		}
-		    		return <Gallery articles={this.state.articles}  photos={this.state.photos} cols={cols} onClickPhoto={this.openLightbox} />
+		    		return <Gallery articles={this.state.articles}  photos={this.state.photos} cols={cols} onClickPhoto={this.openLightbox}  onClickArticle={this.openArticle} />
 				}
 	    	}
 	    	</Measure>
