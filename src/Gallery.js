@@ -109,7 +109,7 @@ class Gallery extends React.Component{
 				const {
 					width,
 					height
-				} = (items.type == 'photo')? items[j]: { width: 100, height: 100};
+				} = (items[j].type == 'photo')? items[j]: { width: 100, height: 100};
 
                 if (j == items.length){
                     break;

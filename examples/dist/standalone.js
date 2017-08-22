@@ -1194,7 +1194,7 @@ var Gallery = (function (_React$Component) {
                         break;
                     }
 
-                    var _ref3 = items.type == 'photo' ? items[j] : { width: 100, height: 100 };
+                    var _ref3 = items[j].type == 'photo' ? items[j] : { width: 100, height: 100 };
 
                     var width = _ref3.width;
                     var height = _ref3.height;
