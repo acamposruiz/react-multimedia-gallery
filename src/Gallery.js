@@ -29,8 +29,11 @@ class Gallery extends React.Component{
 			cols,
 			margin,
 			photos,
+            articles,
 			onClickPhoto
 		} = this.props;
+
+		console.log(articles);
 
 		const containerWidth = this.state.containerWidth;
 
@@ -56,6 +59,11 @@ class Gallery extends React.Component{
 
 	    	// get the total aspect ratio of the row
             for (let j = i; j < i+cols; j++){
+
+            	if (!photos[j]) {
+            		break;
+				}
+
 				const {
 					width,
 					height
@@ -131,6 +139,7 @@ Gallery.propTypes = {
 	    })
 	).isRequired.apply(this,arguments);
     },
+    articles: PropTypes.array,
     onClickPhoto: PropTypes.func,
     cols: PropTypes.number,
     margin: PropTypes.number

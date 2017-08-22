@@ -5,11 +5,12 @@ import $ from 'jquery';
 import _ from 'lodash';
 import Measure from 'react-measure';
 import Lightbox from 'react-images';
+import loremIpsum from 'lorem-ipsum';
 
 class App extends React.Component{
     constructor(){
 		super();
-        this.state = {photos:null, pageNum:1, totalPages:1, loadedAll: false, currentImage:0};
+        this.state = {articles:null, photos:null, pageNum:1, totalPages:1, loadedAll: false, currentImage:0};
 		this.handleScroll = this.handleScroll.bind(this);
 		this.loadMorePhotos = this.loadMorePhotos.bind(this);
 		this.closeLightbox = this.closeLightbox.bind(this);
@@ -27,6 +28,21 @@ class App extends React.Component{
 		if ((window.innerHeight + scrollY) >= (document.body.offsetHeight - 50)) {
 	    	this.loadMorePhotos();
 		}
+    }
+    loadMoreContent(){
+        Promise.all([this.loadMorePhotos, this.loadMoreArticles]).then(data => {
+            this.setState({
+                photos: this.state.photos ? this.state.photos.concat(data[0].photos) : data[0].photos,
+                articles: this.state.articles ? this.state.articles.concat(data[1].articles) : data[0].articles,
+                pageNum: data[0].pageNum,
+                totalPages: data[0].totalPages
+            });
+        })
+    }
+    loadMoreArticles(){
+        return new Promise((resolve, reject) => {
+            resolve({'articles': Array(3).fill(loremIpsum({count: 3, units: 'sentences'}))});
+        });
     }
     loadMorePhotos(e){
         if (e){
@@ -63,8 +79,10 @@ class App extends React.Component{
 		    		]
 				};
 	    	});
+	    	const articles = Array(1,1,1).map(item => loremIpsum({count: 3, units: 'sentences'}));
 	    	this.setState({
 				photos: this.state.photos ? this.state.photos.concat(photos) : photos,
+				articles: this.state.articles ? this.state.articles.concat(articles) : articles,
 				pageNum: this.state.pageNum + 1,
 				totalPages: data.photoset.pages
 	    	});
@@ -112,7 +130,7 @@ class App extends React.Component{
 		    		if (width >= 1024){
 						cols = 3;
 		    		}
-		    		return <Gallery photos={this.state.photos} cols={cols} onClickPhoto={this.openLightbox} />
+		    		return <Gallery articles={this.state.articles}  photos={this.state.photos} cols={cols} onClickPhoto={this.openLightbox} />
 				}
 	    	}
 	    	</Measure>
@@ -123,7 +141,7 @@ class App extends React.Component{
             return(
 				<div className="App">
 		    		{this.renderGallery()}
-		    		<Lightbox 
+		    		<Lightbox
 						theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
 						images={this.state.photos}
 						backdropClosesModal={true}

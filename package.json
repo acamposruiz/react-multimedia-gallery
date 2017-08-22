@@ -14,6 +14,7 @@
     "url": "https://github.com/acamposruiz/react-multimedia-gallery/issues"
   },
   "dependencies": {
+    "lorem-ipsum": "^1.0.4",
     "prop-types": "~15.5.4"
   },
   "devDependencies": {

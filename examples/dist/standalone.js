@@ -121,45 +121,43 @@ var emptyFunction = require('./emptyFunction');
 var warning = emptyFunction;
 
 if (process.env.NODE_ENV !== 'production') {
-  (function () {
-    var printWarning = function printWarning(format) {
-      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
+  var printWarning = function printWarning(format) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var argIndex = 0;
+    var message = 'Warning: ' + format.replace(/%s/g, function () {
+      return args[argIndex++];
+    });
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+
+  warning = function warning(condition, format) {
+    if (format === undefined) {
+      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+    }
+
+    if (format.indexOf('Failed Composite propType: ') === 0) {
+      return; // Ignore CompositeComponent proptype check.
+    }
+
+    if (!condition) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+        args[_key2 - 2] = arguments[_key2];
       }
 
-      var argIndex = 0;
-      var message = 'Warning: ' + format.replace(/%s/g, function () {
-        return args[argIndex++];
-      });
-      if (typeof console !== 'undefined') {
-        console.error(message);
-      }
-      try {
-        // --- Welcome to debugging React ---
-        // This error was thrown as a convenience so that you can use this stack
-        // to find the callsite that caused this warning to fire.
-        throw new Error(message);
-      } catch (x) {}
-    };
-
-    warning = function warning(condition, format) {
-      if (format === undefined) {
-        throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-      }
-
-      if (format.indexOf('Failed Composite propType: ') === 0) {
-        return; // Ignore CompositeComponent proptype check.
-      }
-
-      if (!condition) {
-        for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-          args[_key2 - 2] = arguments[_key2];
-        }
-
-        printWarning.apply(undefined, [format].concat(args));
-      }
-    };
-  })();
+      printWarning.apply(undefined, [format].concat(args));
+    }
+  };
 }
 
 module.exports = warning;
@@ -335,6 +333,10 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -1043,7 +1045,7 @@ module.exports = ReactPropTypesSecret;
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+		value: true
 });
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1065,162 +1067,192 @@ var _propTypes = require('prop-types');
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var Gallery = (function (_React$Component) {
-    _inherits(Gallery, _React$Component);
+		_inherits(Gallery, _React$Component);
 
-    function Gallery() {
-        _classCallCheck(this, Gallery);
+		function Gallery() {
+				_classCallCheck(this, Gallery);
 
-        _get(Object.getPrototypeOf(Gallery.prototype), 'constructor', this).call(this);
-        this.state = {
-            containerWidth: 0
-        };
-        this.handleResize = this.handleResize.bind(this);
-    }
+				_get(Object.getPrototypeOf(Gallery.prototype), 'constructor', this).call(this);
+				this.state = {
+						containerWidth: 0
+				};
+				this.handleResize = this.handleResize.bind(this);
+		}
 
-    _createClass(Gallery, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-            window.addEventListener('resize', this.handleResize);
-        }
-    }, {
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate() {
-            if (this._gallery.clientWidth !== this.state.containerWidth) {
-                this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-            }
-        }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            window.removeEventListener('resize', this.handleResize, false);
-        }
-    }, {
-        key: 'handleResize',
-        value: function handleResize(e) {
-            this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this = this;
+		_createClass(Gallery, [{
+				key: 'componentDidMount',
+				value: function componentDidMount() {
+						this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+						window.addEventListener('resize', this.handleResize);
+				}
+		}, {
+				key: 'componentDidUpdate',
+				value: function componentDidUpdate() {
+						if (this._gallery.clientWidth !== this.state.containerWidth) {
+								this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+						}
+				}
+		}, {
+				key: 'componentWillUnmount',
+				value: function componentWillUnmount() {
+						window.removeEventListener('resize', this.handleResize, false);
+				}
+		}, {
+				key: 'handleResize',
+				value: function handleResize(e) {
+						this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+				}
+		}, {
+				key: 'render',
+				value: function render() {
+						var _props = this.props;
+						var cols = _props.cols;
+						var margin = _props.margin;
+						var photos = _props.photos;
+						var articles = _props.articles;
+						var onClickPhoto = _props.onClickPhoto;
 
-            var cols = this.props.cols,
-                photoPreviewNodes = [],
-                contWidth = this.state.containerWidth - cols * (this.props.margin * 2);
+						console.log(articles);
 
-            contWidth = Math.floor(contWidth); // add some padding to prevent layout prob
-            var remainder = this.props.photos.length % cols;
-            if (remainder) {
-                // there are fewer photos than cols num in last row
-                var lastRowWidth = Math.floor(this.state.containerWidth / cols * remainder - remainder * (this.props.margin * 2));
-                var lastRowIndex = this.props.photos.length - remainder;
-            }
-            // loop thru each set of  cols num
-            // eg. if cols is 3 it will  loop thru 0,1,2, then 3,4,5 to perform calculations for the particular set
-            for (var i = 0; i < this.props.photos.length; i += cols) {
-                var totalAr = 0,
-                    commonHeight = 0;
+						var containerWidth = this.state.containerWidth;
 
-                // get the total aspect ratio of the row
-                for (var j = i; j < i + cols; j++) {
-                    if (j == this.props.photos.length) {
-                        break;
-                    }
-                    this.props.photos[j].aspectRatio = this.props.photos[j].width / this.props.photos[j].height;
-                    totalAr += this.props.photos[j].aspectRatio;
-                }
-                if (i === lastRowIndex) {
-                    commonHeight = lastRowWidth / totalAr;
-                } else {
-                    commonHeight = contWidth / totalAr;
-                }
-                // run thru the same set of items again to give the width and common height
+						var remainder = photos.length % cols;
 
-                var _loop = function (k) {
-                    if (k == _this.props.photos.length) {
-                        return 'break';
-                    }
+						// calculate the available space for the images by subtracting the margin space from the actual parent container width
+						// the 2 is for each side of the image
+						var containerSpace = Math.floor(containerWidth - cols * (margin * 2));
+						var imgNodes = [];
+						var lastRowWidth = undefined;
+						var lastRowIndex = undefined;
 
-                    var src = _this.props.photos[k].src,
-                        srcset = undefined,
-                        sizes = undefined;
-                    if (_this.props.photos[k].srcset) {
-                        srcset = _this.props.photos[k].srcset.join();
-                    }
-                    if (_this.props.photos[k].sizes) {
-                        sizes = _this.props.photos[k].sizes.join();
-                    }
+						if (remainder) {
+								// there are fewer photos than cols num in last row
+								lastRowWidth = Math.floor(containerWidth / cols * remainder - remainder * (margin * 2));
+								lastRowIndex = photos.length - remainder;
+						}
 
-                    style.margin = _this.props.margin;
-                    photoPreviewNodes.push(_react2['default'].createElement(
-                        'div',
-                        { key: k, style: style },
-                        _react2['default'].createElement(
-                            'a',
-                            { href: '#', className: k, onClick: function (e) {
-                                    return _this.props.onClickPhoto(k, e);
-                                } },
-                            _react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: commonHeight * _this.props.photos[k].aspectRatio, alt: _this.props.photos[k].alt })
-                        )
-                    ));
-                };
+						// loop thru each set of cols num
+						// eg. if cols is 3 it will loop thru 0,1,2, then 3,4,5 to perform calculations for the particular set
+						for (var i = 0; i < photos.length; i += cols) {
+								var totalAspectRatio = 0;
+								var commonHeight = 0;
 
-                for (var k = i; k < i + cols; k++) {
-                    var _ret = _loop(k);
+								// get the total aspect ratio of the row
+								for (var j = i; j < i + cols; j++) {
 
-                    if (_ret === 'break') break;
-                }
-            }
-            return this.renderGallery(photoPreviewNodes);
-        }
-    }, {
-        key: 'renderGallery',
-        value: function renderGallery(photoPreviewNodes) {
-            var _this2 = this;
+										if (!photos[j]) {
+												break;
+										}
 
-            return _react2['default'].createElement(
-                'div',
-                { id: 'Gallery', className: 'clearfix', ref: function (c) {
-                        return _this2._gallery = c;
-                    } },
-                photoPreviewNodes
-            );
-        }
-    }]);
+										var _photos$j = photos[j];
+										var width = _photos$j.width;
+										var height = _photos$j.height;
 
-    return Gallery;
+										if (j == photos.length) {
+												break;
+										}
+										photos[j].aspectRatio = width / height;
+										totalAspectRatio += photos[j].aspectRatio;
+								}
+								if (i === lastRowIndex) {
+										commonHeight = lastRowWidth / totalAspectRatio;
+								} else {
+										commonHeight = containerSpace / totalAspectRatio;
+								}
+								// run thru the same set of items again to give the width and common height
+
+								var _loop = function (k) {
+										if (k == photos.length) {
+												return 'break';
+										}
+
+										// explicity set the exact width of the image instead of letting the browser calculate it based on the height of the image
+										// because the browser may round up or down and cause the image to break to the next row if its even 1 pixel off
+										var width = commonHeight * photos[k].aspectRatio;
+
+										var src = photos[k].src;
+										var alt = photos[k].alt;
+										var srcset = undefined;
+										var sizes = undefined;
+
+										if (photos[k].srcset) {
+												srcset = photos[k].srcset.join();
+										}
+										if (photos[k].sizes) {
+												sizes = photos[k].sizes.join();
+										}
+
+										style.margin = margin;
+
+										imgNodes.push(_react2['default'].createElement(
+												'div',
+												{ key: k, style: style },
+												_react2['default'].createElement(
+														'a',
+														{ href: '#', className: k, onClick: function (e) {
+																		return onClickPhoto(k, e);
+																} },
+														_react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: width, alt: alt })
+												)
+										));
+								};
+
+								for (var k = i; k < i + cols; k++) {
+										var _ret = _loop(k);
+
+										if (_ret === 'break') break;
+								}
+						}
+						return this.renderGallery(imgNodes);
+				}
+		}, {
+				key: 'renderGallery',
+				value: function renderGallery(photoPreviewNodes) {
+						var _this = this;
+
+						return _react2['default'].createElement(
+								'div',
+								{ id: 'Gallery', className: 'clearfix', ref: function (c) {
+												return _this._gallery = c;
+										} },
+								photoPreviewNodes
+						);
+				}
+		}]);
+
+		return Gallery;
 })(_react2['default'].Component);
 
 ;
 Gallery.displayName = 'Gallery';
 Gallery.propTypes = {
-    photos: function photos(props, propName, componentName) {
-        return _propTypes2['default'].arrayOf(_propTypes2['default'].shape({
-            src: _propTypes2['default'].string.isRequired,
-            width: _propTypes2['default'].number.isRequired,
-            height: _propTypes2['default'].number.isRequired,
-            alt: _propTypes2['default'].string,
-            srcset: _propTypes2['default'].array,
-            sizes: _propTypes2['default'].array
-        })).isRequired.apply(this, arguments);
-    },
-    onClickPhoto: _propTypes2['default'].func,
-    cols: _propTypes2['default'].number,
-    margin: _propTypes2['default'].number
+		photos: function photos(props, propName, componentName) {
+				return _propTypes2['default'].arrayOf(_propTypes2['default'].shape({
+						src: _propTypes2['default'].string.isRequired,
+						width: _propTypes2['default'].number.isRequired,
+						height: _propTypes2['default'].number.isRequired,
+						alt: _propTypes2['default'].string,
+						srcset: _propTypes2['default'].array,
+						sizes: _propTypes2['default'].array
+				})).isRequired.apply(this, arguments);
+		},
+		articles: _propTypes2['default'].array,
+		onClickPhoto: _propTypes2['default'].func,
+		cols: _propTypes2['default'].number,
+		margin: _propTypes2['default'].number
 };
 Gallery.defaultProps = {
-    cols: 3,
-    onClickPhoto: function onClickPhoto(k, e) {
-        e.preventDefault();
-    },
-    margin: 2
+		cols: 3,
+		onClickPhoto: function onClickPhoto(k, e) {
+				e.preventDefault();
+		},
+		margin: 2
 };
 // Gallery image style
 var style = {
-    display: 'block',
-    backgroundColor: '#e3e3e3',
-    float: 'left'
+		display: 'block',
+		backgroundColor: '#e3e3e3',
+		float: 'left'
 };
 
 exports['default'] = Gallery;
