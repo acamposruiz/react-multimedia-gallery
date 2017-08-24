@@ -92,7 +92,7 @@ iframe {
   /* ascii code for the ellipsis character */
   width: 0px;
 }
-#react-images-container {
+#react-images-texts-videos-container {
   background-color: rgba(0, 0, 0, 0.9);
 }
 @keyframes ellipsis {

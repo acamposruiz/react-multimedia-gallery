@@ -4,7 +4,7 @@ import Gallery from 'react-multimedia-gallery';
 import $ from 'jquery';
 import _ from 'lodash';
 import Measure from 'react-measure';
-import Lightbox from 'react-images';
+import Lightbox from 'react-images-texts-videos';
 import loremIpsum from 'lorem-ipsum';
 
 class App extends React.Component{
