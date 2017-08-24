@@ -10,10 +10,13 @@ import loremIpsum from 'lorem-ipsum';
 class App extends React.Component{
     constructor(){
 		super();
-        this.state = {articles:null, photos:null, pageNum:1, totalPages:1, loadedAll: false, currentImage:0};
+        this.state = {items:{
+            type: 'images',
+            items: []
+        }, articles:null, photos:null, pageNum:1, totalPages:1, loadedAll: false, currentItem:0};
 		this.handleScroll = this.handleScroll.bind(this);
 		this.loadMorePhotos = this.loadMorePhotos.bind(this);
-		this.closeAll = this.closeAll.bind(this);
+		this.closeLightbox = this.closeLightbox.bind(this);
 		this.closeLightbox = this.closeLightbox.bind(this);
 		this.openLightbox = this.openLightbox.bind(this);
 		this.gotoNext = this.gotoNext.bind(this);
@@ -96,47 +99,38 @@ class App extends React.Component{
           }.bind(this)
         });
     }
-    openLightbox(index, event){
-        event.preventDefault();
-        this.setState({
-            currentImage: index,
-            lightboxIsOpen: true
-        });
-    }
-    openArticle(index, event){
-        event.preventDefault();
-        this.setState({
-            currentArticle: index,
-            articleboxIsOpen: true
-        });
-    }
-    closeAll(){
-        this.closeLightbox();
-        this.closeArticle();
+    openLightbox(typeItem){
+
+        return function(index, event) {
+            event.preventDefault();
+            this.setState({
+                items: {
+                    type: (typeItem == 'photos')? 'images':(typeItem == 'articles')? 'texts':'videos',
+                    items: (typeItem == 'photos')? this.state[typeItem]:this.state[typeItem].map(item => item.content)
+                },
+                currentItem: index,
+                lightboxIsOpen: true
+            });
+        }.bind(this);
+
     }
     closeLightbox(){
         this.setState({
-            currentImage: 0,
+            currentItem: 0,
             lightboxIsOpen: false,
-        });
-    }
-    closeArticle(){
-        this.setState({
-            currentArticle: 0,
-            articleboxIsOpen: false,
         });
     }
     gotoPrevious(){
         this.setState({
-            currentImage: this.state.currentImage - 1,
+            currentItem: this.state.currentItem - 1,
         });
     }
     gotoNext(){
-        if(this.state.photos.length - 2 === this.state.currentImage){
+        if(this.state.photos.length - 2 === this.state.currentItem){
             this.loadMorePhotos();
         }
         this.setState({
-            currentImage: this.state.currentImage + 1,
+            currentItem: this.state.currentItem + 1,
         });
     }
     renderGallery(){
@@ -151,7 +145,7 @@ class App extends React.Component{
 		    		if (width >= 1024){
 						cols = 3;
 		    		}
-		    		return <Gallery articles={this.state.articles}  photos={this.state.photos} cols={cols} onClickPhoto={this.openLightbox}  onClickArticle={this.openArticle} />
+		    		return <Gallery articles={this.state.articles}  photos={this.state.photos} cols={cols} onClickPhoto={this.openLightbox('photos')}  onClickArticle={this.openLightbox('articles')} />
 				}
 	    	}
 	    	</Measure>
@@ -164,12 +158,12 @@ class App extends React.Component{
 		    		{this.renderGallery()}
 		    		<Lightbox
 						theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
-						images={this.state.photos}
+						items={this.state.items}
 						backdropClosesModal={true}
-						onClose={this.closeAll}
+						onClose={this.closeLightbox}
 						onClickPrev={this.gotoPrevious}
 						onClickNext={this.gotoNext}
-						currentImage={this.state.currentImage}
+						currentItem={this.state.currentItem}
 						isOpen={this.state.lightboxIsOpen}
 						width={1600}
 					/>
