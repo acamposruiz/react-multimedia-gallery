@@ -1276,8 +1276,7 @@ var Gallery = (function (_React$Component) {
                             _react2['default'].createElement(
                                 'span',
                                 null,
-                                content.substring(0, 250),
-                                '...'
+                                content
                             )
                         )
                     )

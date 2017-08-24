@@ -13,6 +13,7 @@ class App extends React.Component{
         this.state = {articles:null, photos:null, pageNum:1, totalPages:1, loadedAll: false, currentImage:0};
 		this.handleScroll = this.handleScroll.bind(this);
 		this.loadMorePhotos = this.loadMorePhotos.bind(this);
+		this.closeAll = this.closeAll.bind(this);
 		this.closeLightbox = this.closeLightbox.bind(this);
 		this.openLightbox = this.openLightbox.bind(this);
 		this.gotoNext = this.gotoNext.bind(this);
@@ -81,7 +82,7 @@ class App extends React.Component{
 				};
 	    	});
 	    	const articles = Array(1,1,1).map(item => {
-	    	    return {type:'article', content:loremIpsum({count: 3, units: 'sentences'})};
+	    	    return {type:'article', content:loremIpsum({count: 10, units: 'sentences'})};
             });
 	    	this.setState({
 				photos: this.state.photos ? this.state.photos.concat(photos) : photos,
@@ -109,10 +110,20 @@ class App extends React.Component{
             articleboxIsOpen: true
         });
     }
+    closeAll(){
+        this.closeLightbox();
+        this.closeArticle();
+    }
     closeLightbox(){
         this.setState({
             currentImage: 0,
             lightboxIsOpen: false,
+        });
+    }
+    closeArticle(){
+        this.setState({
+            currentArticle: 0,
+            articleboxIsOpen: false,
         });
     }
     gotoPrevious(){
@@ -155,7 +166,7 @@ class App extends React.Component{
 						theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
 						images={this.state.photos}
 						backdropClosesModal={true}
-						onClose={this.closeLightbox}
+						onClose={this.closeAll}
 						onClickPrev={this.gotoPrevious}
 						onClickNext={this.gotoNext}
 						currentImage={this.state.currentImage}

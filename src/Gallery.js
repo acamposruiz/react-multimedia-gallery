@@ -175,7 +175,7 @@ class Gallery extends React.Component{
 				<div data-type="article" key={k} style={style}>
 					<a href="#" className={k} onClick={(e) => onClickArticle(oldIndex, e)}>
 						<div className="content"  style={{display:'block', border:0, height:commonHeight, width:width}}>
-							<span>{content.substring(0,250)}...</span>
+							<span>{content}</span>
 						</div>
 					</a>
 				</div>
