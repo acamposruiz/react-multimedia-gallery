@@ -35,10 +35,24 @@ import Gallery from 'react-multimedia-gallery';
 export default class Sample extends React.Component {
     render() {
 	return (
-	    <Gallery photos={PHOTO_SET} onClickPhoto={this.openLightbox}/>
+	    <Gallery photos={PHOTO_SET} onClickPhoto={this.openLightbox} articles={ARTICLE_SET} onClickArticles={this.openArticle}/>
 	);
     }
 }
+const ARTICLE_SET = [
+   {
+     type:'article',
+     content:'Text1...',
+   },
+   {
+     type:'article',
+     content:'Text2...',
+   },
+   {
+     type:'article',
+     content:'Text3...',
+   },
+]
 const PHOTO_SET = [
   {
     src: 'http://example.com/example/img1.jpg',
@@ -56,6 +70,7 @@ const PHOTO_SET = [
     width: 681,
     height: 1024,
     alt: 'image 1',
+    type: 'photo',
   },
   {
     src: 'http://example.com/example/img2.jpg',
@@ -82,10 +97,12 @@ const PHOTO_SET = [
 
 Property        |       Type            |       Default         |       Description
 :-----------------------|:--------------|:--------------|:--------------------------------
-photos | array  | undefined  | required; array of objects
+photos | array  | undefined  | array of objects
+articles | array  | undefined  | array of objects
 cols | number  | 3  | optional; number of photos per row
 onClickPhoto | function  | function  | optional; do something when the user clicks a photo
-margin | number  | 2  | optional; number of margin pixels around each entire image 
+onClickArticle | function  | function  | optional; do something when the user clicks a article
+margin | number  | 2  | optional; number of margin pixels around each entire image
 
 ### Gallery.photos properties
 
@@ -97,6 +114,14 @@ sizes     |       string    |       undefined    |       optional; the img sizes
 width | number  | undefined  | required; original width of the gallery image (only used for calculating aspect ratio)
 height  | number  | undefined | required; original height of the gallery image (only used for calculating aspect ratio)
 alt  | string  | undefined | optional; alt text of the gallery image
+type  | string  | undefined | required set to photo value
+
+### Gallery.Articles properties
+
+Property        |       Type            |       Default         |       Description
+:-----------------------|:--------------|:--------------|:--------------------------------
+content     |       string    |       undefined    |       required; text content
+type  | string  | undefined | required set to article value
 
 
 ## User Guide / Best Practice
@@ -125,7 +150,7 @@ This idea was discussed in #32 and proposed by @smeijer.
 In the demo I chose to have one object of photos that I pass in to both the Gallery component and the Lightbox component to keep the code cleaner and stateless.  Stateless because I can keep the Lightbox outside of the Gallery component and the user can decide whether to use any Lightbox of their choosing or none at all. I added all the properties into this object that either component might need or that I wanted to use for customization.
 
 ## Other notes
-This component uses [React Images](https://github.com/jossmac/react-images-texts-videos) for lightbox functionality in the example demo, but the component itself does not depend on it.
+This component uses [React Images, Texts and Videos](https://github.com/acamposruiz/react-images-texts-videos) for lightbox functionality in the example demo, but the component itself does not depend on it.
 
 To gain a good understanding of 'srcset' and 'sizes' attributes, I found this site very helpful: [https://ericportis.com/posts/2014/srcset-sizes/](https://ericportis.com/posts/2014/srcset-sizes/).
 
