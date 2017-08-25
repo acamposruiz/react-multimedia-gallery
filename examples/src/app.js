@@ -72,7 +72,8 @@ class App extends React.Component{
 	    	const articles = Array(1,1,1).map(item => {
 	    	    return {type:'article', content:loremIpsum({count: 10, units: 'sentences'})};
             });
-	    	const items = processItems(photos, articles);
+	    	const items = processItems(photos, articles, this.state.photos && this.state.photos.length,
+                this.state.articles && this.state.articles.length);
 	    	this.setState({
                 photos: this.state.photos ? this.state.photos.concat(photos) : photos,
                 articles: this.state.articles ? this.state.articles.concat(articles) : articles,
@@ -86,10 +87,10 @@ class App extends React.Component{
           }.bind(this)
         });
 
-        function processItems(photos, articles) {
+        function processItems(photos, articles, photosLength, articlesLength) {
 
-            function indexAll(elemts) {
-                elemts.map((e,index) => e['oldIndex'] = index);
+            function indexAll(elemts, offset) {
+                elemts.map((e,index) => e['oldIndex'] = index + offset);
             }
 
             function merge(array1,array2) {
@@ -118,8 +119,8 @@ class App extends React.Component{
             }
 
             if (photos && articles) {
-                indexAll(photos);
-                indexAll(articles);
+                indexAll(photos, photosLength || 0);
+                indexAll(articles, articlesLength || 0);
                 return merge(photos, articles);
             } else if (photos) { return photos; } else { return articles; }
         }
