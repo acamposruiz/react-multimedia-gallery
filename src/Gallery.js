@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { StyleSheet, css } from 'aphrodite';
 
 class Gallery extends React.Component{
     constructor(){
@@ -174,14 +175,33 @@ class Gallery extends React.Component{
             return(
 				<div data-type="article" key={k} style={style}>
 					<a href="#" className={k} onClick={(e) => onClickArticle(oldIndex, e)}>
-						<div className="content"  style={{display:'block', border:0, height:commonHeight, width:width}}>
-							<span>{content}</span>
-						</div>
+							<span style={{display:'block', border:0, height:commonHeight, width:width}} className={css(this.textStyles(commonHeight,width).text_thumbail)}>{content}</span>
 					</a>
 				</div>
             );
         }
 	}
+    textStyles(commonHeight,width){
+		return StyleSheet.create({
+
+            // anchor
+            text_thumbail: {
+                padding: '21px',
+                'box-sizing': 'border-box',
+                cursor: 'pointer',
+                height: commonHeight,
+                'text-align': 'justify',
+                'font-size': '20px',
+                width: width,
+                overflow: 'scroll',
+                'border-radius': '4px',
+                color: 'darkgray',
+
+                '@media (min-width: 500px)': {
+                },
+            },
+        });
+    }
     renderGallery(itemNodePreviewNodes){
 		return(
 	    	<div id="Gallery" className="clearfix" ref={(c) => this._gallery = c}>
@@ -219,8 +239,32 @@ Gallery.defaultProps = {
 // Gallery image style
 const style = {
    display: 'block',
-   backgroundColor:'#e3e3e3',
    float: 'left'
-}
+};
+
+const classes = StyleSheet.create({
+
+    // anchor
+    text_thumbail: {
+        cursor: 'pointer',
+        height: '200px',
+        'text-align': 'justify',
+        'font-size': '16px',
+        width: '46%',
+        padding: '10px',
+        margin: '10px',
+        boxSizing: 'border-box',
+        display: 'block',
+        float: 'left',
+        overflow: 'scroll',
+        border: 'solid 1px #E6E6E8',
+        'border-radius': '4px',
+        color: 'darkgray',
+
+        '@media (min-width: 500px)': {
+        },
+    },
+});
+
 
 export default Gallery;

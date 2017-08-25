@@ -47,6 +47,11 @@ a:hover {
 .container {
   margin: 0 auto;
 }
+.text_content {
+  font-size: 20px;
+  padding: 70px;
+  color: #d8d8d8;
+}
 h1,
 h2,
 h3 {
