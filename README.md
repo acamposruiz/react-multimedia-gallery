@@ -35,7 +35,7 @@ import Gallery from 'react-multimedia-gallery';
 export default class Sample extends React.Component {
     render() {
 	return (
-	    <Gallery photos={PHOTO_SET} onClickPhoto={this.openLightbox} articles={ARTICLE_SET} onClickArticles={this.openArticle}/>
+	    <Gallery items={ITEMS_SET} onClickItem={this.openLightbox} />
 	);
     }
 }
@@ -91,20 +91,20 @@ const PHOTO_SET = [
   }
 ];
 
+const ITEMS_SET = PHOTO_SET.concat(ARTICLE_SET);
+
 ```
 
 ### Gallery properties
 
 Property        |       Type            |       Default         |       Description
 :-----------------------|:--------------|:--------------|:--------------------------------
-photos | array  | undefined  | array of objects
-articles | array  | undefined  | array of objects
+items | array  | undefined  | array of objects
 cols | number  | 3  | optional; number of photos per row
-onClickPhoto | function  | function  | optional; do something when the user clicks a photo
-onClickArticle | function  | function  | optional; do something when the user clicks a article
+onClickItem | function  | function  | optional; do something when the user clicks a item
 margin | number  | 2  | optional; number of margin pixels around each entire image
 
-### Gallery.photos properties
+### Photo object in Gallery.items properties
 
 Property        |       Type            |       Default         |       Description
 :-----------------------|:--------------|:--------------|:--------------------------------
@@ -116,7 +116,7 @@ height  | number  | undefined | required; original height of the gallery image (
 alt  | string  | undefined | optional; alt text of the gallery image
 type  | string  | undefined | required set to photo value
 
-### Gallery.Articles properties
+### Article object in Gallery.items properties
 
 Property        |       Type            |       Default         |       Description
 :-----------------------|:--------------|:--------------|:--------------------------------
