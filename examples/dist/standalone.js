@@ -3063,8 +3063,6 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
-var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
@@ -3122,64 +3120,13 @@ var Gallery = (function (_React$Component) {
             this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
         }
     }, {
-        key: 'processItems',
-        value: function processItems(photos, articles) {
-
-            function indexAll(elemts) {
-                elemts.map(function (e, index) {
-                    return e['oldIndex'] = index;
-                });
-            }
-
-            function merge(array1, array2) {
-
-                var output = [];
-
-                var _ref = array1.length > array2.length ? [array1, array2] : [array2, array1];
-
-                var _ref2 = _slicedToArray(_ref, 2);
-
-                var arrayBase = _ref2[0];
-                var arrayIntro = _ref2[1];
-
-                var size = Math.floor(arrayBase.length / arrayIntro.length);
-
-                for (var i = 0, j = 0; i < arrayBase.length; i += size, j++) {
-
-                    if (j >= arrayIntro.length) {
-                        output = output.concat(arrayBase.slice(i));
-                        break;
-                    } else {
-                        output.push(arrayIntro[j]);
-                        output = output.concat(arrayBase.slice(i, i + size));
-                    }
-                }
-
-                return output;
-            }
-
-            if (photos && articles) {
-                indexAll(photos);
-                indexAll(articles);
-                return merge(photos, articles);
-            } else if (photos) {
-                return photos;
-            } else {
-                return articles;
-            }
-        }
-    }, {
         key: 'render',
         value: function render() {
             var _props = this.props;
             var cols = _props.cols;
             var margin = _props.margin;
-            var photos = _props.photos;
-            var articles = _props.articles;
-            var onClickArticle = _props.onClickArticle;
-            var onClickPhoto = _props.onClickPhoto;
-
-            var items = this.processItems(photos, articles);
+            var items = _props.items;
+            var onClickItem = _props.onClickItem;
 
             var containerWidth = this.state.containerWidth;
 
@@ -3211,10 +3158,10 @@ var Gallery = (function (_React$Component) {
                         break;
                     }
 
-                    var _ref3 = items[j].type == 'photo' ? items[j] : { width: 100, height: 100 };
+                    var _ref = items[j].type == 'photo' ? items[j] : { width: 100, height: 100 };
 
-                    var width = _ref3.width;
-                    var height = _ref3.height;
+                    var width = _ref.width;
+                    var height = _ref.height;
 
                     if (j == items.length) {
                         break;
@@ -3241,14 +3188,14 @@ var Gallery = (function (_React$Component) {
 
                     style.margin = margin;
 
-                    itemNode.push(this.renderItem(items[k], k, style, onClickPhoto, onClickArticle, commonHeight, width));
+                    itemNode.push(this.renderItem(items[k], k, style, onClickItem, commonHeight, width));
                 }
             }
             return this.renderGallery(itemNode);
         }
     }, {
         key: 'renderItem',
-        value: function renderItem(item, k, style, onClickPhoto, onClickArticle, commonHeight, width) {
+        value: function renderItem(item, k, style, onClickItem, commonHeight, width) {
             var oldIndex = item.oldIndex;
 
             if (item.type == 'photo') {
@@ -3272,7 +3219,7 @@ var Gallery = (function (_React$Component) {
                     _react2['default'].createElement(
                         'a',
                         { href: '#', className: k, onClick: function (e) {
-                                return onClickPhoto(oldIndex, e);
+                                return onClickItem(oldIndex, e, 'photos');
                             } },
                         _react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: width, alt: alt })
                     )
@@ -3285,7 +3232,7 @@ var Gallery = (function (_React$Component) {
                     _react2['default'].createElement(
                         'a',
                         { href: '#', className: k, onClick: function (e) {
-                                return onClickArticle(oldIndex, e);
+                                return onClickItem(oldIndex, e, 'articles');
                             } },
                         _react2['default'].createElement(
                             'span',
@@ -3339,24 +3286,14 @@ var Gallery = (function (_React$Component) {
 ;
 Gallery.displayName = 'Gallery';
 Gallery.propTypes = {
-    photos: function photos(props, propName, componentName) {
-        return _propTypes2['default'].arrayOf(_propTypes2['default'].shape({
-            src: _propTypes2['default'].string.isRequired,
-            width: _propTypes2['default'].number.isRequired,
-            height: _propTypes2['default'].number.isRequired,
-            alt: _propTypes2['default'].string,
-            srcset: _propTypes2['default'].array,
-            sizes: _propTypes2['default'].array
-        })).isRequired.apply(this, arguments);
-    },
-    articles: _propTypes2['default'].array,
-    onClickPhoto: _propTypes2['default'].func,
+    items: _propTypes2['default'].array,
+    onClickItem: _propTypes2['default'].func,
     cols: _propTypes2['default'].number,
     margin: _propTypes2['default'].number
 };
 Gallery.defaultProps = {
     cols: 3,
-    onClickPhoto: function onClickPhoto(k, e) {
+    onClickItem: function onClickItem(k, e) {
         e.preventDefault();
     },
     margin: 2

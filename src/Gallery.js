@@ -26,57 +26,13 @@ class Gallery extends React.Component{
         this.setState({containerWidth: Math.floor(this._gallery.clientWidth)});
     }
 
-    processItems(photos, articles) {
-
-        function indexAll(elemts) {
-            elemts.map((e,index) => e['oldIndex'] = index);
-        }
-
-        function merge(array1,array2) {
-
-            let output = [];
-
-            const [arrayBase,arrayIntro] = (array1.length > array2.length)? [array1,array2]: [array2,array1];
-
-            const size = Math.floor(arrayBase.length / arrayIntro.length);
-
-
-            for (var i=0,j=0; i<arrayBase.length; i+=size, j++) {
-
-                if (j >= arrayIntro.length) {
-                    output = output.concat(arrayBase.slice(i));
-                    break;
-                } else {
-                    output.push(arrayIntro[j]);
-                    output = output.concat(arrayBase.slice(i,i+size));
-                }
-
-            }
-
-            return output;
-
-        }
-
-        if (photos && articles) {
-            indexAll(photos);
-            indexAll(articles);
-            return merge(photos, articles);
-        } else if (photos) { return photos; } else { return articles; }
-    }
-
     render(){
 		const {
 			cols,
 			margin,
-			photos,
-            articles,
-            onClickArticle,
-			onClickPhoto
+			items,
+            onClickItem
 		} = this.props;
-
-
-
-        const items = this.processItems(photos, articles);
 
 		const containerWidth = this.state.containerWidth;
 
@@ -137,7 +93,7 @@ class Gallery extends React.Component{
 
 				style.margin = margin;
 
-                itemNode.push(this.renderItem(items[k], k, style, onClickPhoto, onClickArticle, commonHeight, width));
+                itemNode.push(this.renderItem(items[k], k, style, onClickItem, commonHeight, width));
 
             }
         }
@@ -145,7 +101,7 @@ class Gallery extends React.Component{
 	    	this.renderGallery(itemNode)
         );
     }
-    renderItem(item, k, style, onClickPhoto, onClickArticle, commonHeight, width) {
+    renderItem(item, k, style, onClickItem, commonHeight, width) {
         const oldIndex = item.oldIndex;
 
         if (item.type == 'photo') {
@@ -165,7 +121,7 @@ class Gallery extends React.Component{
 
             return(
 				<div data-type="photo" key={k} style={style}>
-					<a href="#" className={k} onClick={(e) => onClickPhoto(oldIndex, e)}>
+					<a href="#" className={k} onClick={(e) => onClickItem(oldIndex, e, 'photos')}>
 						<img src={src} srcSet={srcset} sizes={sizes} style={{display:'block', border:0}} height={commonHeight} width={width} alt={alt} />
 					</a>
 				</div>
@@ -174,7 +130,7 @@ class Gallery extends React.Component{
             const content = item.content;
             return(
 				<div data-type="article" key={k} style={style}>
-					<a href="#" className={k} onClick={(e) => onClickArticle(oldIndex, e)}>
+					<a href="#" className={k} onClick={(e) => onClickItem(oldIndex, e, 'articles')}>
 							<span style={{display:'block', border:0, height:commonHeight, width:width}} className={css(this.textStyles(commonHeight,width).text_thumbail)}>{content}</span>
 					</a>
 				</div>
@@ -212,26 +168,14 @@ class Gallery extends React.Component{
 };
 Gallery.displayName = 'Gallery';
 Gallery.propTypes = {
-    photos: function(props, propName, componentName){
-		return PropTypes.arrayOf(
-	    	PropTypes.shape({
-				src: PropTypes.string.isRequired,
-				width: PropTypes.number.isRequired,
-				height: PropTypes.number.isRequired,
-				alt: PropTypes.string,
-				srcset: PropTypes.array,
-				sizes: PropTypes.array
-	    })
-	).isRequired.apply(this,arguments);
-    },
-    articles: PropTypes.array,
-    onClickPhoto: PropTypes.func,
+    items: PropTypes.array,
+    onClickItem: PropTypes.func,
     cols: PropTypes.number,
     margin: PropTypes.number
 };
 Gallery.defaultProps = {
-    cols: 3, 
-    onClickPhoto: (k,e) => {
+    cols: 3,
+    onClickItem: (k,e) => {
 		e.preventDefault();
     },
     margin: 2

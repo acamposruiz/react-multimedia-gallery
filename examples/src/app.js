@@ -10,10 +10,10 @@ import loremIpsum from 'lorem-ipsum';
 class App extends React.Component{
     constructor(){
 		super();
-        this.state = {items:{
+        this.state = {items:null, photos:null, articles:null,  itemsLightbox:{
             type: 'images',
             items: []
-        }, articles:null, photos:null, pageNum:1, totalPages:1, loadedAll: false, currentItem:0};
+        }, pageNum:1, totalPages:1, loadedAll: false, currentItem:0};
 		this.handleScroll = this.handleScroll.bind(this);
 		this.loadMorePhotos = this.loadMorePhotos.bind(this);
 		this.closeLightbox = this.closeLightbox.bind(this);
@@ -32,21 +32,6 @@ class App extends React.Component{
 		if ((window.innerHeight + scrollY) >= (document.body.offsetHeight - 50)) {
 	    	this.loadMorePhotos();
 		}
-    }
-    loadMoreContent(){
-        Promise.all([this.loadMorePhotos, this.loadMoreArticles]).then(data => {
-            this.setState({
-                photos: this.state.photos ? this.state.photos.concat(data[0].photos) : data[0].photos,
-                articles: this.state.articles ? this.state.articles.concat(data[1].articles) : data[0].articles,
-                pageNum: data[0].pageNum,
-                totalPages: data[0].totalPages
-            });
-        })
-    }
-    loadMoreArticles(){
-        return new Promise((resolve, reject) => {
-            resolve({'articles': Array(3).fill(loremIpsum({count: 3, units: 'sentences'}))});
-        });
     }
     loadMorePhotos(e){
         if (e){
@@ -87,9 +72,11 @@ class App extends React.Component{
 	    	const articles = Array(1,1,1).map(item => {
 	    	    return {type:'article', content:loremIpsum({count: 10, units: 'sentences'})};
             });
+	    	const items = processItems(photos, articles);
 	    	this.setState({
-				photos: this.state.photos ? this.state.photos.concat(photos) : photos,
-				articles: this.state.articles ? this.state.articles.concat(articles) : articles,
+                photos: this.state.photos ? this.state.photos.concat(photos) : photos,
+                articles: this.state.articles ? this.state.articles.concat(articles) : articles,
+				items: this.state.items ? this.state.items.concat(items) : items,
 				pageNum: this.state.pageNum + 1,
 				totalPages: data.photoset.pages
 	    	});
@@ -98,20 +85,56 @@ class App extends React.Component{
             console.error(status, err.toString());
           }.bind(this)
         });
-    }
-    openLightbox(typeItem){
 
-        return function(index, event) {
-            event.preventDefault();
-            this.setState({
-                items: {
-                    type: (typeItem == 'photos')? 'images':(typeItem == 'articles')? 'texts':'videos',
-                    items: (typeItem == 'photos')? this.state[typeItem]:this.state[typeItem].map(item => item.content)
-                },
-                currentItem: index,
-                lightboxIsOpen: true
-            });
-        }.bind(this);
+        function processItems(photos, articles) {
+
+            function indexAll(elemts) {
+                elemts.map((e,index) => e['oldIndex'] = index);
+            }
+
+            function merge(array1,array2) {
+
+                let output = [];
+
+                const [arrayBase,arrayIntro] = (array1.length > array2.length)? [array1,array2]: [array2,array1];
+
+                const size = Math.floor(arrayBase.length / arrayIntro.length);
+
+
+                for (var i=0,j=0; i<arrayBase.length; i+=size, j++) {
+
+                    if (j >= arrayIntro.length) {
+                        output = output.concat(arrayBase.slice(i));
+                        break;
+                    } else {
+                        output.push(arrayIntro[j]);
+                        output = output.concat(arrayBase.slice(i,i+size));
+                    }
+
+                }
+
+                return output;
+
+            }
+
+            if (photos && articles) {
+                indexAll(photos);
+                indexAll(articles);
+                return merge(photos, articles);
+            } else if (photos) { return photos; } else { return articles; }
+        }
+    }
+    openLightbox(index, event, typeItem){
+        event.preventDefault();
+
+        this.setState({
+            itemsLightbox: {
+                type: (typeItem == 'photos')? 'images':(typeItem == 'articles')? 'texts':'videos',
+                items: (typeItem == 'photos')? this.state[typeItem]:this.state[typeItem].map(item => item.content)
+            },
+            currentItem: index,
+            lightboxIsOpen: true
+        });
 
     }
     closeLightbox(){
@@ -145,7 +168,7 @@ class App extends React.Component{
 		    		if (width >= 1024){
 						cols = 3;
 		    		}
-		    		return <Gallery articles={this.state.articles}  photos={this.state.photos} cols={cols} onClickPhoto={this.openLightbox('photos')}  onClickArticle={this.openLightbox('articles')} />
+		    		return <Gallery items={this.state.items}  cols={cols} onClickItem={this.openLightbox} />
 				}
 	    	}
 	    	</Measure>
@@ -158,7 +181,7 @@ class App extends React.Component{
 		    		{this.renderGallery()}
 		    		<Lightbox
 						theme={{container: { background: 'rgba(0, 0, 0, 0.85)' }}}
-						items={this.state.items}
+						items={this.state.itemsLightbox}
 						backdropClosesModal={true}
 						onClose={this.closeLightbox}
 						onClickPrev={this.gotoPrevious}
