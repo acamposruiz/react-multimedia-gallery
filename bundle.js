@@ -3157,7 +3157,7 @@ var Gallery = (function (_React$Component) {
                         break;
                     }
 
-                    var _ref = items[j].type == 'photo' ? items[j] : { width: 100, height: 100 };
+                    var _ref = items[j].type == 'photo' || items[j].type == 'video' ? items[j] : { width: 100, height: 100 };
 
                     var width = _ref.width;
                     var height = _ref.height;
@@ -3221,6 +3221,36 @@ var Gallery = (function (_React$Component) {
                                 return onClickItem(oldIndex, e, 'photos');
                             } },
                         _react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: width, alt: alt })
+                    )
+                );
+            } else if (item.type == 'video') {
+
+                var src = item.src;
+
+                var srcset = undefined;
+                var sizes = undefined;
+
+                if (item.srcset) {
+                    srcset = item.srcset.join();
+                }
+                if (item.sizes) {
+                    sizes = item.sizes.join();
+                }
+
+                return _react2['default'].createElement(
+                    'div',
+                    { className: 'video-item-container', 'data-type': 'video', key: k, style: style },
+                    _react2['default'].createElement(
+                        'a',
+                        { href: '#', className: k, onClick: function (e) {
+                                return onClickItem(oldIndex, e, 'videos');
+                            } },
+                        _react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: width }),
+                        _react2['default'].createElement(
+                            'i',
+                            { className: 'material-icons' },
+                            'play_circle_outline'
+                        )
                     )
                 );
             } else if (item.type == 'article') {
