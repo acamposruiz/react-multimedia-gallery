@@ -66,7 +66,7 @@ class Gallery extends React.Component{
 				const {
 					width,
 					height
-				} = (items[j].type == 'photo')? items[j]: { width: 100, height: 100};
+				} = (items[j].type == 'photo' || items[j].type == 'video')? items[j]: { width: 100, height: 100};
 
                 if (j == items.length){
                     break;
@@ -126,7 +126,29 @@ class Gallery extends React.Component{
 					</a>
 				</div>
             );
-        } else if (item.type == 'article') {
+        } else if (item.type == 'video') {
+
+            const src = item.src;
+
+            let srcset;
+            let sizes;
+
+            if (item.srcset){
+                srcset = item.srcset.join();
+            }
+            if (item.sizes){
+                sizes = item.sizes.join();
+            }
+
+            return(
+                <div className="video-item-container" data-type="video" key={k} style={style}>
+                    <a href="#" className={k} onClick={(e) => onClickItem(oldIndex, e, 'videos')}>
+                        <img src={src} srcSet={srcset} sizes={sizes} style={{display:'block', border:0}} height={commonHeight} width={width} />
+                        <i className="material-icons">play_circle_outline</i>
+                    </a>
+                </div>
+            );
+        }else if (item.type == 'article') {
             const content = item.content;
             return(
 				<div data-type="article" key={k} style={style}>

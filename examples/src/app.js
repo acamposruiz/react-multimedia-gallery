@@ -10,7 +10,7 @@ import loremIpsum from 'lorem-ipsum';
 class App extends React.Component{
     constructor(){
 		super();
-        this.state = {items:null, photos:null, articles:null,  itemsLightbox:{
+        this.state = {page:0, items:null, photos:null, articles:null,   videos:null,  itemsLightbox:{
             type: 'images',
             items: []
         }, pageNum:1, totalPages:1, loadedAll: false, currentItem:0};
@@ -41,12 +41,14 @@ class App extends React.Component{
 	    	this.setState({loadedAll: true});
 	    	return;
 		}
+
         $.ajax({
           url: 'https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=372ef3a005d9b9df062b8240c326254d&photoset_id=72157680705961676&user_id=57933175@N08&format=json&per_page=21&page='+this.state.pageNum+'&extras=url_m,url_c,url_l,url_h,url_o',
           dataType: 'jsonp',
           jsonpCallback: 'jsonFlickrApi',
           cache: false,
           success: (data) => {
+              console.log(data);
 	    	let photos = data.photoset.photo.map((item) => {
                 let aspectRatio = parseFloat(item.width_o / item.height_o);
 				return {
@@ -72,11 +74,40 @@ class App extends React.Component{
 	    	const articles = Array(1,1,1).map(item => {
 	    	    return {type:'article', content:loremIpsum({count: 10, units: 'sentences'})};
             });
-	    	const items = processItems(photos, articles, this.state.photos && this.state.photos.length,
-                this.state.articles && this.state.articles.length);
+	    	const videos = Array(
+	    	    Array('jlNvOWDfMYo', 'iRXJXaLV0n4', 'geqVuYmo8Y0', 'tntOCGkgt98'),
+                Array('1demxrg1pXE','DK9JIaokhc0','IrdYueB9pY4', 'sgiR7blUDA8'),
+                Array('Mq0yEI_xpb8','Ec7gzVZv0','shluYa5WDUQ', 'hY7m5jjJ9mM'),
+                Array('4a0FbQdH3dY','cfnXs03FA5s','IX7pdpm1gp8', 'QFH747sK200'))[this.state.page].map((youtubeId) => {
+                return {
+                    src: `https://i1.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`,
+                    width: 1920,
+                    height: 1080,
+                    type: 'video',
+                    content: youtubeId,
+                    srcset:[
+                        `https://i1.ytimg.com/vi/${youtubeId}/maxresdefault.jpg 1024w`,
+                        `https://i1.ytimg.com/vi/${youtubeId}/sddefault.jpg 800w`,
+                        `https://i1.ytimg.com/vi/${youtubeId}/G0wGs3useV8.jpg 500w`,
+                        `https://i1.ytimg.com/vi/${youtubeId}/G0wGs3useV8.jpg 320w`,
+                    ],
+                    sizes:[
+                        '(min-width: 480px) 50vw',
+                        '(min-width: 1024px) 33.3vw',
+                        '100vw'
+                    ]
+                };
+            });
+            this.setState({page: this.state.page + 1});
+	    	let items = processItems(photos, articles,  videos,
+                this.state.photos && this.state.photos.length,
+                this.state.articles && this.state.articles.length,
+                this.state.videos && this.state.videos.length
+            );
 	    	this.setState({
                 photos: this.state.photos ? this.state.photos.concat(photos) : photos,
                 articles: this.state.articles ? this.state.articles.concat(articles) : articles,
+                videos: this.state.videos ? this.state.videos.concat(videos) : videos,
 				items: this.state.items ? this.state.items.concat(items) : items,
 				pageNum: this.state.pageNum + 1,
 				totalPages: data.photoset.pages
@@ -87,7 +118,7 @@ class App extends React.Component{
           }.bind(this)
         });
 
-        function processItems(photos, articles, photosLength, articlesLength) {
+        function processItems(photos, articles,  videos, photosLength, articlesLength, videosLength) {
 
             function indexAll(elemts, offset) {
                 elemts.map((e,index) => e['oldIndex'] = index + offset);
@@ -118,10 +149,11 @@ class App extends React.Component{
 
             }
 
-            if (photos && articles) {
+            if (photos && articles && videos) {
                 indexAll(photos, photosLength || 0);
                 indexAll(articles, articlesLength || 0);
-                return merge(photos, articles);
+                indexAll(videos, videosLength || 0);
+                return merge(merge(videos, articles), photos);
             } else if (photos) { return photos; } else { return articles; }
         }
     }
@@ -176,7 +208,7 @@ class App extends React.Component{
 		);
     }
     render(){
-        if (this.state.photos){
+        if (this.state.items){
             return(
 				<div className="App">
 		    		{this.renderGallery()}

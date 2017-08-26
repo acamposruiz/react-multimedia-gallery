@@ -30,7 +30,7 @@
     "react-dom": "~15.5.0",
     "react-component-gulp-tasks": "^0.7.7",
     "react-measure": "~1.4.7",
-    "react-images-texts-videos": "~0.0.3"
+    "react-images-texts-videos": "~0.0.5"
   },
   "peerDependencies": {
     "react": "~15.5.0",
