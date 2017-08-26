@@ -44,6 +44,25 @@ class Gallery extends React.Component{
 		let itemNode = [];
 		let lastRowWidth;
 		let lastRowIndex;
+		let photoIndex=0;
+		let videoIndex=0;
+		let articleIndex=0;
+
+		function getItemIndex(type) {
+		    switch (type) {
+                case 'photo':
+                    return photoIndex++;
+                    break;
+                case 'video':
+                    return videoIndex++;
+                    break;
+                case 'article':
+                    return articleIndex++;
+                    break;
+                default:
+                    break;
+            }
+        }
 
         if (remainder) { // there are fewer photos than cols num in last row
           lastRowWidth = Math.floor( ((containerWidth / cols) * remainder) - (remainder * (margin * 2)) );
@@ -93,7 +112,7 @@ class Gallery extends React.Component{
 
 				style.margin = margin;
 
-                itemNode.push(this.renderItem(items[k], k, style, onClickItem, commonHeight, width));
+                itemNode.push(this.renderItem(items[k], k, style, onClickItem, commonHeight, width, getItemIndex(items[k].type)));
 
             }
         }
@@ -101,8 +120,7 @@ class Gallery extends React.Component{
 	    	this.renderGallery(itemNode)
         );
     }
-    renderItem(item, k, style, onClickItem, commonHeight, width) {
-        const oldIndex = item.oldIndex;
+    renderItem(item, k, style, onClickItem, commonHeight, width, itemIndex) {
 
         if (item.type == 'photo') {
 
@@ -121,7 +139,7 @@ class Gallery extends React.Component{
 
             return(
 				<div data-type="photo" key={k} style={style}>
-					<a href="#" className={k} onClick={(e) => onClickItem(oldIndex, e, 'photos')}>
+					<a href="#" className={k} onClick={(e) => onClickItem(itemIndex, e, 'photos')}>
 						<img src={src} srcSet={srcset} sizes={sizes} style={{display:'block', border:0}} height={commonHeight} width={width} alt={alt} />
 					</a>
 				</div>
@@ -142,7 +160,7 @@ class Gallery extends React.Component{
 
             return(
                 <div className="video-item-container" data-type="video" key={k} style={style}>
-                    <a href="#" className={k} onClick={(e) => onClickItem(oldIndex, e, 'videos')}>
+                    <a href="#" className={k} onClick={(e) => onClickItem(itemIndex, e, 'videos')}>
                         <img src={src} srcSet={srcset} sizes={sizes} style={{display:'block', border:0}} height={commonHeight} width={width} />
                         <i className="material-icons">play_circle_outline</i>
                     </a>
@@ -152,7 +170,7 @@ class Gallery extends React.Component{
             const content = item.content;
             return(
 				<div data-type="article" key={k} style={style}>
-					<a href="#" className={k} onClick={(e) => onClickItem(oldIndex, e, 'articles')}>
+					<a href="#" className={k} onClick={(e) => onClickItem(itemIndex, e, 'articles')}>
 							<span style={{display:'block', border:0, height:commonHeight, width:width}} className={css(this.textStyles(commonHeight,width).text_thumbail)}>{content}</span>
 					</a>
 				</div>

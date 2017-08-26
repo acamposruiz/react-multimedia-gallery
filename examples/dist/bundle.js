@@ -3137,6 +3137,25 @@ var Gallery = (function (_React$Component) {
             var itemNode = [];
             var lastRowWidth = undefined;
             var lastRowIndex = undefined;
+            var photoIndex = 0;
+            var videoIndex = 0;
+            var articleIndex = 0;
+
+            function getItemIndex(type) {
+                switch (type) {
+                    case 'photo':
+                        return photoIndex++;
+                        break;
+                    case 'video':
+                        return videoIndex++;
+                        break;
+                    case 'article':
+                        return articleIndex++;
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             if (remainder) {
                 // there are fewer photos than cols num in last row
@@ -3187,15 +3206,14 @@ var Gallery = (function (_React$Component) {
 
                     style.margin = margin;
 
-                    itemNode.push(this.renderItem(items[k], k, style, onClickItem, commonHeight, width));
+                    itemNode.push(this.renderItem(items[k], k, style, onClickItem, commonHeight, width, getItemIndex(items[k].type)));
                 }
             }
             return this.renderGallery(itemNode);
         }
     }, {
         key: 'renderItem',
-        value: function renderItem(item, k, style, onClickItem, commonHeight, width) {
-            var oldIndex = item.oldIndex;
+        value: function renderItem(item, k, style, onClickItem, commonHeight, width, itemIndex) {
 
             if (item.type == 'photo') {
 
@@ -3218,7 +3236,7 @@ var Gallery = (function (_React$Component) {
                     _react2['default'].createElement(
                         'a',
                         { href: '#', className: k, onClick: function (e) {
-                                return onClickItem(oldIndex, e, 'photos');
+                                return onClickItem(itemIndex, e, 'photos');
                             } },
                         _react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: width, alt: alt })
                     )
@@ -3243,7 +3261,7 @@ var Gallery = (function (_React$Component) {
                     _react2['default'].createElement(
                         'a',
                         { href: '#', className: k, onClick: function (e) {
-                                return onClickItem(oldIndex, e, 'videos');
+                                return onClickItem(itemIndex, e, 'videos');
                             } },
                         _react2['default'].createElement('img', { src: src, srcSet: srcset, sizes: sizes, style: { display: 'block', border: 0 }, height: commonHeight, width: width }),
                         _react2['default'].createElement(
@@ -3261,7 +3279,7 @@ var Gallery = (function (_React$Component) {
                     _react2['default'].createElement(
                         'a',
                         { href: '#', className: k, onClick: function (e) {
-                                return onClickItem(oldIndex, e, 'articles');
+                                return onClickItem(itemIndex, e, 'articles');
                             } },
                         _react2['default'].createElement(
                             'span',

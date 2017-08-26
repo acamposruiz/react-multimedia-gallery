@@ -99,11 +99,7 @@ class App extends React.Component{
                 };
             });
             this.setState({page: this.state.page + 1});
-	    	let items = processItems(photos, articles,  videos,
-                this.state.photos && this.state.photos.length,
-                this.state.articles && this.state.articles.length,
-                this.state.videos && this.state.videos.length
-            );
+	    	let items = processItems(photos, articles,  videos);
 	    	this.setState({
                 photos: this.state.photos ? this.state.photos.concat(photos) : photos,
                 articles: this.state.articles ? this.state.articles.concat(articles) : articles,
@@ -118,11 +114,7 @@ class App extends React.Component{
           }.bind(this)
         });
 
-        function processItems(photos, articles,  videos, photosLength, articlesLength, videosLength) {
-
-            function indexAll(elemts, offset) {
-                elemts.map((e,index) => e['oldIndex'] = index + offset);
-            }
+        function processItems(photos, articles,  videos) {
 
             function merge(array1,array2) {
 
@@ -150,9 +142,6 @@ class App extends React.Component{
             }
 
             if (photos && articles && videos) {
-                indexAll(photos, photosLength || 0);
-                indexAll(articles, articlesLength || 0);
-                indexAll(videos, videosLength || 0);
                 return merge(merge(videos, articles), photos);
             } else if (photos) { return photos; } else { return articles; }
         }
