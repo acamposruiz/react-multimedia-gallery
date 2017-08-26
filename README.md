@@ -110,6 +110,7 @@ const VIDEO_SET = [
     ],
     width: 681,
     height: 1024,
+    content: 'youtubeId1',
     type: 'video',
   },
   {
@@ -127,6 +128,7 @@ const VIDEO_SET = [
     ],
     width: 681,
     height: 1024,
+    content: 'youtubeId2',
     type: 'video',
   }
 ];
@@ -166,6 +168,7 @@ sizes     |       string    |       undefined    |       optional; the img sizes
 width | number  | undefined  | required; original width of the gallery image (only used for calculating aspect ratio)
 height  | number  | undefined | required; original height of the gallery image (only used for calculating aspect ratio)
 type  | string  | undefined | required set to video value
+content  | string  | undefined | required; id of the video on youtube
 
 ### Article object in Gallery.items properties
 
