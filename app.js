@@ -128,7 +128,7 @@ var App = (function (_React$Component) {
                         };
                     });
                     _this.setState({ page: _this.state.page + 1 });
-                    var items = processItems(photos, articles, videos, _this.state.photos && _this.state.photos.length, _this.state.articles && _this.state.articles.length, _this.state.videos && _this.state.videos.length);
+                    var items = processItems(photos, articles, videos);
                     _this.setState({
                         photos: _this.state.photos ? _this.state.photos.concat(photos) : photos,
                         articles: _this.state.articles ? _this.state.articles.concat(articles) : articles,
@@ -143,13 +143,7 @@ var App = (function (_React$Component) {
                 }).bind(this)
             });
 
-            function processItems(photos, articles, videos, photosLength, articlesLength, videosLength) {
-
-                function indexAll(elemts, offset) {
-                    elemts.map(function (e, index) {
-                        return e['oldIndex'] = index + offset;
-                    });
-                }
+            function processItems(photos, articles, videos) {
 
                 function merge(array1, array2) {
 
@@ -179,9 +173,6 @@ var App = (function (_React$Component) {
                 }
 
                 if (photos && articles && videos) {
-                    indexAll(photos, photosLength || 0);
-                    indexAll(articles, articlesLength || 0);
-                    indexAll(videos, videosLength || 0);
                     return merge(merge(videos, articles), photos);
                 } else if (photos) {
                     return photos;
