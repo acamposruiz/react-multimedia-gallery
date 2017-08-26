@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/react-multimedia-gallery/Lobby](https://badges.gitter.im/react-multimedia-gallery/Lobby.svg)](https://gitter.im/react-multimedia-gallery/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A stateless responsive React multimedia gallery component to manage photos, texts and videos, that maintains the original aspect ratio of your photos and scales them responsively.
+A stateless responsive React multimedia gallery component to manage photos, texts and videos (only from youtube), that maintains the original aspect ratio of your photos and scales them responsively.
 Add your own routing, lightbox, and manage your own state. 
 
 ## Installation
@@ -12,6 +12,10 @@ To install:
 ```
 npm install --save react-multimedia-gallery
 ```
+
+### Video snapshops
+
+The images included in the video object are the snapshots to show in the gallery before play de video.
 
 ## Demo
 
@@ -90,8 +94,44 @@ const PHOTO_SET = [
     alt: 'image 2',
   }
 ];
+const VIDEO_SET = [
+  {
+    src: 'https://img.youtube.com/vi/<insert-youtube-video-id-here>/0.jpg',
+    srcset: [
+      'https://i1.ytimg.com/vi/<insert-youtube-video-id-here>/maxresdefault.jpg 1024w',
+      'https://i1.ytimg.com/vi/<insert-youtube-video-id-here>/sddefault.jpg 800w',
+      'https://i1.ytimg.com/vi/<insert-youtube-video-id-here>/hqdefault.jpg 500w',
+      'https://i1.ytimg.com/vi/<insert-youtube-video-id-here>/mqdefault.jpg 320w',
+    ],
+    sizes:[
+      '(min-width: 480px) 50vw',
+      '(min-width: 1024px) 33.3vw',
+      '100vw'
+    ],
+    width: 681,
+    height: 1024,
+    type: 'video',
+  },
+  {
+    src: 'https://img.youtube.com/vi/<insert-youtube-video-id-here>/0.jpg',
+    srcset: [
+      'https://i1.ytimg.com/vi/<insert-youtube-video-id-here>/maxresdefault.jpg 1024w',
+      'https://i1.ytimg.com/vi/<insert-youtube-video-id-here>/sddefault.jpg 800w',
+      'https://i1.ytimg.com/vi/<insert-youtube-video-id-here>/hqdefault.jpg 500w',
+      'https://i1.ytimg.com/vi/<insert-youtube-video-id-here>/mqdefault.jpg 320w',
+    ],
+    sizes:[
+      '(min-width: 480px) 50vw',
+      '(min-width: 1024px) 33.3vw',
+      '100vw'
+    ],
+    width: 681,
+    height: 1024,
+    type: 'video',
+  }
+];
 
-const ITEMS_SET = PHOTO_SET.concat(ARTICLE_SET);
+const ITEMS_SET = PHOTO_SET.concat(VIDEO_SET.concat(ARTICLE_SET));
 
 ```
 
@@ -115,6 +155,17 @@ width | number  | undefined  | required; original width of the gallery image (on
 height  | number  | undefined | required; original height of the gallery image (only used for calculating aspect ratio)
 alt  | string  | undefined | optional; alt text of the gallery image
 type  | string  | undefined | required set to photo value
+
+### Video object in Gallery.items properties
+
+Property        |       Type            |       Default         |       Description
+:-----------------------|:--------------|:--------------|:--------------------------------
+src     |       string    |       undefined    |       required; the img src attribute value of the gallery image
+srcset     |       string    |       undefined    |       optional; the img srcset attribute value of the gallery image
+sizes     |       string    |       undefined    |       optional; the img sizes attribute value of the gallery image
+width | number  | undefined  | required; original width of the gallery image (only used for calculating aspect ratio)
+height  | number  | undefined | required; original height of the gallery image (only used for calculating aspect ratio)
+type  | string  | undefined | required set to video value
 
 ### Article object in Gallery.items properties
 
@@ -148,6 +199,7 @@ This idea was discussed in #32 and proposed by @smeijer.
 ### Passing in photos
 
 In the demo I chose to have one object of photos that I pass in to both the Gallery component and the Lightbox component to keep the code cleaner and stateless.  Stateless because I can keep the Lightbox outside of the Gallery component and the user can decide whether to use any Lightbox of their choosing or none at all. I added all the properties into this object that either component might need or that I wanted to use for customization.
+
 
 ## Other notes
 This component uses [React Images, Texts and Videos](https://github.com/acamposruiz/react-images-texts-videos) for lightbox functionality in the example demo, but the component itself does not depend on it.
