@@ -1,6 +1,6 @@
 {
   "name": "react-multimedia-gallery",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Responsive React Multimedia Gallery Component where you can deal with videos, photos and texts in the same way",
   "main": "lib/Gallery.js",
   "author": "Sandy Gonzales, Antonio Campos",
