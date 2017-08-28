@@ -169,7 +169,7 @@ class Gallery extends React.Component{
         }else if (item.type == 'article') {
             const content = item.content;
             return(
-				<div data-type="article" key={k} style={style}>
+				<div className="text_thumbail" data-type="article" key={k} style={style}>
 					<a href="#" className={k} onClick={(e) => onClickItem(itemIndex, e, 'articles')}>
 							<span style={{display:'block', border:0, height:commonHeight, width:width}} className={css(this.textStyles(commonHeight,width).text_thumbail)}>{content}</span>
 					</a>
@@ -191,7 +191,6 @@ class Gallery extends React.Component{
                 width: width,
                 overflow: 'scroll',
                 'border-radius': '4px',
-                color: 'darkgray',
 
                 '@media (min-width: 500px)': {
                 },
@@ -230,23 +229,6 @@ const classes = StyleSheet.create({
 
     // anchor
     text_thumbail: {
-        cursor: 'pointer',
-        height: '200px',
-        'text-align': 'justify',
-        'font-size': '16px',
-        width: '46%',
-        padding: '10px',
-        margin: '10px',
-        boxSizing: 'border-box',
-        display: 'block',
-        float: 'left',
-        overflow: 'scroll',
-        border: 'solid 1px #E6E6E8',
-        'border-radius': '4px',
-        color: 'darkgray',
-
-        '@media (min-width: 500px)': {
-        },
     },
 });
 

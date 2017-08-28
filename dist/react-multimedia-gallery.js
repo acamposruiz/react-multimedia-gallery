@@ -3297,7 +3297,6 @@ var Gallery = (function (_React$Component) {
                     width: width,
                     overflow: 'scroll',
                     'border-radius': '4px',
-                    color: 'darkgray',
 
                     '@media (min-width: 500px)': {}
                 }
@@ -3345,24 +3344,7 @@ var style = {
 var classes = _aphrodite.StyleSheet.create({
 
     // anchor
-    text_thumbail: {
-        cursor: 'pointer',
-        height: '200px',
-        'text-align': 'justify',
-        'font-size': '16px',
-        width: '46%',
-        padding: '10px',
-        margin: '10px',
-        boxSizing: 'border-box',
-        display: 'block',
-        float: 'left',
-        overflow: 'scroll',
-        border: 'solid 1px #E6E6E8',
-        'border-radius': '4px',
-        color: 'darkgray',
-
-        '@media (min-width: 500px)': {}
-    }
+    text_thumbail: {}
 });
 
 exports['default'] = Gallery;
