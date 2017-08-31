@@ -13,9 +13,9 @@ To install:
 npm install --save react-multimedia-gallery
 ```
 
-### Video snapshops
+### Video thumbnail
 
-The images included in the video object are the snapshots to show in the gallery before play de video.
+The images included in the video object are the thumbnail to show in the gallery before play de video.
 
 ## Demo
 
@@ -141,7 +141,7 @@ const ITEMS_SET = PHOTO_SET.concat(VIDEO_SET.concat(ARTICLE_SET));
 
 Property        |       Type            |       Default         |       Description
 :-----------------------|:--------------|:--------------|:--------------------------------
-items | array  | undefined  | array of objects
+items | array  | undefined  | required; array of objects that can be photos, videos on youtube or articles
 cols | number  | 3  | optional; number of photos per row
 onClickItem | function  | function  | optional; do something when the user clicks a item
 margin | number  | 2  | optional; number of margin pixels around each entire image

@@ -207,7 +207,7 @@ class Gallery extends React.Component{
 };
 Gallery.displayName = 'Gallery';
 Gallery.propTypes = {
-    items: PropTypes.array,
+    items: PropTypes.array.isRequired,
     onClickItem: PropTypes.func,
     cols: PropTypes.number,
     margin: PropTypes.number

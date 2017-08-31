@@ -3266,7 +3266,7 @@ var Gallery = (function (_React$Component) {
                 var content = item.content;
                 return _react2['default'].createElement(
                     'div',
-                    { 'data-type': 'article', key: k, style: style },
+                    { className: 'text_thumbail', 'data-type': 'article', key: k, style: style },
                     _react2['default'].createElement(
                         'a',
                         { href: '#', className: k, onClick: function (e) {
@@ -3323,7 +3323,7 @@ var Gallery = (function (_React$Component) {
 ;
 Gallery.displayName = 'Gallery';
 Gallery.propTypes = {
-    items: _propTypes2['default'].array,
+    items: _propTypes2['default'].array.isRequired,
     onClickItem: _propTypes2['default'].func,
     cols: _propTypes2['default'].number,
     margin: _propTypes2['default'].number
