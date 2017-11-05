@@ -189,7 +189,7 @@ class Gallery extends React.Component{
                 'text-align': 'justify',
                 'font-size': '20px',
                 width: width,
-                overflow: 'scroll',
+                overflow: 'auto',
                 'border-radius': '4px',
 
                 '@media (min-width: 500px)': {
