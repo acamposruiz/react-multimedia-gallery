@@ -38,6 +38,10 @@ class Gallery extends React.Component{
 
         const remainder = items.length % cols;
 
+      if (!Object.getOwnPropertyDescriptor(style, 'margin')
+        || _.get(Object.getOwnPropertyDescriptor(style, 'margin'), 'writable'))
+        _.set(style, 'margin', margin);
+
 		// calculate the available space for the images by subtracting the margin space from the actual parent container width
 		// the 2 is for each side of the image
 		const containerSpace = Math.floor(containerWidth - (cols * (margin * 2))); 
@@ -110,7 +114,6 @@ class Gallery extends React.Component{
 				// because the browser may round up or down and cause the image to break to the next row if its even 1 pixel off
 				const width = commonHeight * items[k].aspectRatio;
 
-				style.margin = margin;
 
                 itemNode.push(this.renderItem(items[k], k, style, onClickItem, commonHeight, width, getItemIndex(items[k].type)));
 
