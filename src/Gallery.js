@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
+import _ from 'lodash';
 
 class Gallery extends React.Component{
     constructor(){
